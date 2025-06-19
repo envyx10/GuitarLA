@@ -1,11 +1,15 @@
 
-
  export default function Header() {
 
-    return (
-        
-        <h1>Desde header</h1>
 
+    const total = '1000'
+
+    return (
+        <>
+            <h1>total: {total} </h1>
+            <p>total: {total} </p>
+         
+        </>
     )
 
 }
