@@ -1,90 +1,57 @@
+
+import { useState} from "react";
+
 import "./App.css";
 import Header from "./Components/Header";
 import Guitar from "./Components/Guitar";
+import { db } from './data/db';
 
 function App() {
+
+  const [data, setData] = useState(db);
+
+  /*
+  · Inicializa varaible de estado llamada cart
+  · Su valor iniciar es un array vacio, lo que significa que de base comienza sin ningún elemento
+  · cart contendrá los elementos que están actualmente en el carrito de compras del usuario, y setCart es la función utilizada para actualizar cart
+  */
+  const [cart, setCart] = useState([]);
+
+  /**
+   * Funcion diseñada para agregar un item al cart
+   * · Usa la función setCart (de useState) para actualizar el estado de cart.
+   * · prevCart => ... es una función de callback que recibe el estado anterior del cart (prevCart) como argumento. Esta es la forma recomendada de actualizar 
+   *   el estado cuando el nuevo estado depende del estado anterior.
+   * · [...prevCart, item] usa la sintaxis de propagación (...) para crear un nuevo array. 
+   *   Este nuevo array contiene todos los elementos que estaban previamente en prevCart, más el nuevo item que se pasó a la función addToCart.
+   * · Al crear un nuevo array, React detecta que el estado ha cambiado y volverá a renderizar el componente para reflejar el carrito actualizado.
+   * @param {*} item 
+   */
+  function addToCard(item){
+    setCart( prevCart => [...prevCart, item])
+  }
+
+
   return (
     <>
       <Header />
-      <header className="py-5 header">
-        <div className="container-xl">
-          <div className="row justify-content-center justify-content-md-between">
-            <div className="col-8 col-md-3">
-              <a href="index.html">
-                <img
-                  className="img-fluid"
-                  src="./public/img/logo.svg"
-                  alt="imagen logo"
-                />
-              </a>
-            </div>
-            <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
-              <div className="carrito">
-                <img
-                  className="img-fluid"
-                  src="./public/img/carrito.png"
-                  alt="imagen carrito"
-                />
-
-                <div id="carrito" className="bg-white p-3">
-                  <p className="text-center">El carrito esta vacio</p>
-                  <table className="w-100 table">
-                    <thead>
-                      <tr>
-                        <th>Imagen</th>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <img
-                            className="img-fluid"
-                            src="./public/img/guitarra_02.jpg"
-                            alt="imagen guitarra"
-                          />
-                        </td>
-                        <td>SRV</td>
-                        <td className="fw-bold">$299</td>
-                        <td className="flex align-items-start gap-4">
-                          <button type="button" className="btn btn-dark">
-                            -
-                          </button>
-                          1
-                          <button type="button" className="btn btn-dark">
-                            +
-                          </button>
-                        </td>
-                        <td>
-                          <button className="btn btn-danger" type="button">
-                            X
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-    
-                  <p className="text-end">
-                    Total pagar: <span className="fw-bold">$899</span>
-                  </p>
-                  <button className="btn btn-dark w-100 mt-3 p-2">
-                    Vaciar Carrito
-                  </button>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </div>
-      </header>
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
+
         <div className="row mt-5">
-          <Guitar/>
+
+          { data.map((guitar) => ( 
+            <Guitar 
+              key={guitar.id}
+              guitar={guitar}
+              addToCard={addToCard} // props de la funcion
+              setCart={setCart}
+            /> 
+          ))}
+
         </div>
+
       </main>
 
       <footer className="bg-dark mt-5 py-5">
